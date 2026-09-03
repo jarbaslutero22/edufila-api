@@ -2,6 +2,8 @@ const express = require("express")
 const cors = require("cors")
 require("dotenv").config()
 
+const usuariosRoutes = require("./routes/usuarios.routes")
+
 const app = express()
 
 app.use(cors())
@@ -14,6 +16,8 @@ app.get("/", (req, res) => {
     mensagem: "API funcionando corretamente"
   })
 })
+
+app.use("/api/usuarios", usuariosRoutes)
 
 const PORT = process.env.PORT || 3000
 
