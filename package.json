@@ -1,0 +1,24 @@
+{
+  "name": "edufila-api",
+  "version": "1.0.0",
+  "description": "API do sistema EduFila para gerenciamento de filas de atendimento acadêmico",
+  "main": "src/app.js",
+  "scripts": {
+    "dev": "node src/app.js",
+    "start": "node src/app.js"
+  },
+  "keywords": [
+    "edufila",
+    "api",
+    "fila",
+    "atendimento"
+  ],
+  "author": "Equipe EduFila",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1"
+  }
+}
