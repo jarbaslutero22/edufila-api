@@ -6,6 +6,7 @@ const usuariosRoutes = require("./routes/usuarios.routes")
 const setoresRoutes = require("./routes/setores.routes")
 const senhasRoutes = require("./routes/senhas.routes")
 const filaRoutes = require("./routes/fila.routes")
+const relatoriosRoutes = require("./routes/relatorios.routes")
 
 const app = express()
 
@@ -24,6 +25,7 @@ app.use("/api/usuarios", usuariosRoutes)
 app.use("/api/setores", setoresRoutes)
 app.use("/api/senhas", senhasRoutes)
 app.use("/api/fila", filaRoutes)
+app.use("/api/relatorios", relatoriosRoutes)
 
 const PORT = process.env.PORT || 3000
 
