@@ -4,6 +4,7 @@ require("dotenv").config()
 
 const usuariosRoutes = require("./routes/usuarios.routes")
 const setoresRoutes = require("./routes/setores.routes")
+const senhasRoutes = require("./routes/senhas.routes")
 
 const app = express()
 
@@ -20,6 +21,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/usuarios", usuariosRoutes)
 app.use("/api/setores", setoresRoutes)
+app.use("/api/senhas", senhasRoutes)
 
 const PORT = process.env.PORT || 3000
 
