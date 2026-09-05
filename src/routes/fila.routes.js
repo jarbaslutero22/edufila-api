@@ -23,7 +23,8 @@ let fila = [
   }
 ]
 
-// Função auxiliar para ordenar a fila
+let historico = []
+
 function ordenarFila(lista) {
   return [...lista].sort((a, b) => {
     if (a.prioridade === b.prioridade) {
@@ -97,6 +98,52 @@ router.patch("/:codigo/adiar", (req, res) => {
   res.status(200).json({
     mensagem: "Atendimento adiado com sucesso",
     senha
+  })
+})
+
+// Finalizar atendimento
+router.patch("/:codigo/finalizar", (req, res) => {
+  const codigo = req.params.codigo.toUpperCase()
+
+  const senha = fila.find(
+    (item) => item.codigo.toUpperCase() === codigo
+  )
+
+  if (!senha) {
+    return res.status(404).json({
+      mensagem: "Senha não encontrada"
+    })
+  }
+
+  if (senha.status !== "em_atendimento") {
+    return res.status(400).json({
+      mensagem: "A senha precisa estar em atendimento para ser finalizada"
+    })
+  }
+
+  senha.status = "finalizado"
+  senha.horarioFinalizacao = new Date().toISOString()
+
+  historico.push({
+    ...senha
+  })
+
+  fila = fila.filter(
+    (item) => item.codigo !== codigo
+  )
+
+  res.status(200).json({
+    mensagem: "Atendimento finalizado com sucesso",
+    atendimento: senha
+  })
+})
+
+// Histórico de atendimentos
+router.get("/historico/listar", (req, res) => {
+  res.status(200).json({
+    mensagem: "Histórico de atendimentos do EduFila",
+    quantidade: historico.length,
+    historico
   })
 })
 
