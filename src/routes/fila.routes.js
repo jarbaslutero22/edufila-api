@@ -25,6 +25,7 @@ let fila = [
 
 let historico = []
 
+// Ordenar fila considerando prioridade
 function ordenarFila(lista) {
   return [...lista].sort((a, b) => {
     if (a.prioridade === b.prioridade) {
@@ -35,7 +36,7 @@ function ordenarFila(lista) {
   })
 }
 
-// Listar a fila
+// Listar fila
 router.get("/", (req, res) => {
   const filaOrdenada = ordenarFila(fila)
 
@@ -46,7 +47,7 @@ router.get("/", (req, res) => {
   })
 })
 
-// Chamar o próximo estudante
+// Chamar próximo
 router.patch("/chamar-proximo", (req, res) => {
   const aguardando = fila.filter(
     (item) => item.status === "aguardando"
@@ -92,11 +93,44 @@ router.patch("/:codigo/adiar", (req, res) => {
   senha.prioridade = false
   senha.horarioAdiamento = new Date().toISOString()
 
-  const maiorId = Math.max(...fila.map((item) => item.id))
+  const maiorId =
+    fila.length > 0
+      ? Math.max(...fila.map((item) => item.id))
+      : 0
+
   senha.id = maiorId + 1
 
   res.status(200).json({
     mensagem: "Atendimento adiado com sucesso",
+    senha
+  })
+})
+
+// Priorizar atendimento
+router.patch("/:codigo/priorizar", (req, res) => {
+  const codigo = req.params.codigo.toUpperCase()
+
+  const senha = fila.find(
+    (item) => item.codigo.toUpperCase() === codigo
+  )
+
+  if (!senha) {
+    return res.status(404).json({
+      mensagem: "Senha não encontrada"
+    })
+  }
+
+  if (senha.status !== "aguardando") {
+    return res.status(400).json({
+      mensagem: "Somente senhas aguardando podem ser priorizadas"
+    })
+  }
+
+  senha.prioridade = true
+  senha.horarioPriorizacao = new Date().toISOString()
+
+  res.status(200).json({
+    mensagem: "Atendimento priorizado com sucesso",
     senha
   })
 })
@@ -138,7 +172,7 @@ router.patch("/:codigo/finalizar", (req, res) => {
   })
 })
 
-// Histórico de atendimentos
+// Histórico
 router.get("/historico/listar", (req, res) => {
   res.status(200).json({
     mensagem: "Histórico de atendimentos do EduFila",
@@ -147,7 +181,7 @@ router.get("/historico/listar", (req, res) => {
   })
 })
 
-// Consultar uma senha específica
+// Consultar senha específica
 router.get("/:codigo", (req, res) => {
   const codigo = req.params.codigo.toUpperCase()
 
